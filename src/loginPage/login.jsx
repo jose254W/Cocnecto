@@ -6,6 +6,7 @@ import {
   Button,
   Alert,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { initializeApp } from "firebase/app";
@@ -94,22 +95,25 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Email:</Text>
+    <ImageBackground 
+    source={{ uri: "https://images.unsplash.com/photo-1592858167090-2473780d894d?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQxNTIyNTB8&ixlib=rb-4.0.3&q=85" }}
+    style={styles.image}>
+      <Text style={styles.text}>Email:</Text>
       <TextInput
         style={styles.input}
         value={email}
         placeholder="Enter @email"
         onChangeText={setEmail}
       />
-      <Text>Password:</Text>
+      <Text style={styles.text}>Password:</Text>
+      <View  style={styles.input}>
       <TextInput
-        style={styles.input}
         value={password}
         placeholder="Enter password"
         onChangeText={setPassword}
         secureTextEntry={!showPassword}
       />
-      <TouchableOpacity onPress={toggleShowPassword}>
+      <TouchableOpacity onPress={toggleShowPassword} style={[styles.showPasswordButton, {alignSelf: 'center'}]}>
         <Ionicons
           name={showPassword ? "eye-off" : "eye"}
           size={24}
@@ -117,6 +121,7 @@ const LoginScreen = () => {
           style={{ marginTop: -14 }}
         />
       </TouchableOpacity>
+      </View>
       <Text style={styles.text}>Loggin As:</Text>
       <View style={styles.button}>
         <Button
@@ -139,6 +144,7 @@ const LoginScreen = () => {
       <View style={styles.button}>
         <Button title="Forgot Password" onPress={handleForgotPassword} />
       </View>
+      </ImageBackground>
     </View>
   );
 };
