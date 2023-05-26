@@ -49,7 +49,7 @@ const LoginScreen = () => {
       if (userType === "mixologist") {
         navigation.navigate("Cocnecto");
       } else {
-        navigation.navigate("Client");
+        navigation.navigate("Profile");
       }
     } catch (error) {
       console.log(error);
