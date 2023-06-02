@@ -58,7 +58,7 @@ const Profile = ({ onFormSubmit }) => {
           };
 
           const response = await axios.post(
-            "http://192.168.100.43:3000/profile",
+            
             profileData,
             {
               headers: {
@@ -68,7 +68,7 @@ const Profile = ({ onFormSubmit }) => {
           );
           const userId = user.uid;
           const profileResponse = await axios.get(
-            `http://192.168.100.43:3000/profile/${userId}`
+            
           );
           const responseData = profileResponse.data;
           console.log("Profile info:", responseData);
