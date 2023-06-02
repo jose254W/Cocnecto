@@ -4,21 +4,9 @@ import { Calendar } from "react-native-calendars";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import styles from "./profilestyles";
-
-import "firebase/auth";
 import { initializeApp } from "firebase/app";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCXgeZFeZHqjocwoW42jksUIZFF6YGVVM0",
-  authDomain: "cocnecto.firebaseapp.com",
-  projectId: "cocnecto",
-  storageBucket: "cocnecto.appspot.com",
-  messagingSenderId: "954674691783",
-  appId: "1:954674691783:web:7b528b8dbbdbbd99d848e2",
-  measurementId: "G-EFVN3RBKW8",
-};
-
-const app = initializeApp(firebaseConfig);
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 
 const Profile = ({ onFormSubmit }) => {
   const [profileImage, setProfileImage] = useState(null);
@@ -38,45 +26,75 @@ const Profile = ({ onFormSubmit }) => {
   const [gender, setGender] = useState("");
   const [showGenderOptions, setShowGenderOptions] = useState(false);
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyCXgeZFeZHqjocwoW42jksUIZFF6YGVVM0",
+    authDomain: "cocnecto.firebaseapp.com",
+    projectId: "cocnecto",
+    storageBucket: "cocnecto.appspot.com",
+    messagingSenderId: "954674691783",
+    appId: "1:954674691783:web:7b528b8dbbdbbd99d848e2",
+    measurementId: "G-EFVN3RBKW8",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const submitForm = async () => {
+    console.log("Submit form called");
     try {
-      // Generate a new ID on the frontend
-      const newId = Date.now().toString();
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          const newId = Date.now().toString();
 
-      const profileData = {
-        id: newId, // Include the generated ID in the profile data
-        profileImage,
-        specialty,
-        availability,
-        location,
-        contactInfo,
-        experienceEntries,
-        gender,
-      };
+          const profileData = {
+            id: newId,
+            userId: user.uid,
+            profileImage,
+            specialty,
+            availability,
+            location,
+            contactInfo,
+            experienceEntries,
+            gender,
+          };
 
-      console.log("Profile Data:", profileData);
+          const response = await axios.post(
+            "http://192.168.100.43:3000/profile",
+            profileData,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const userId = user.uid;
+          const profileResponse = await axios.get(
+            `http://192.168.100.43:3000/profile/${userId}`
+          );
+          const responseData = profileResponse.data;
+          console.log("Profile info:", responseData);
+          // Handle the profile data in your frontend code
 
-      const response = await axios.post(
-        "http://192.168.100.43:3000/profile",
-        profileData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          const data = response.data;
+          console.log(data);
+
+          const firestore = getFirestore(app);
+          const profileRef = doc(firestore, "profiles", user.uid);
+
+          await setDoc(profileRef, profileData);
+
+          console.log("Profile data saved successfully");
+
+          // Call getProfileData to display the profile data after submission
+          await profileData(user.uid);
+        } else {
+          console.log("User is not logged in");
         }
-      );
-
-      const data = response.data;
-      console.log(data);
-
-      // Call onFormSubmit after the form submission
-      onFormSubmit(data);
+      });
     } catch (error) {
       console.error(error);
     }
   };
 
-  // Function to handle the form submission result
   function onFormSubmit(data) {
     console.log("Form submitted");
     console.log("Received data:", data);
