@@ -9,6 +9,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeApp } from "firebase/app";
 import "firebase/auth";
 import {
@@ -49,7 +50,11 @@ const LoginScreen = () => {
       if (userType === "mixologist") {
         navigation.navigate("Cocnecto");
       } else {
-        navigation.navigate("Profile");
+        const profileDataString = await AsyncStorage.getItem("profileData");
+        const profileData = JSON.parse(profileDataString);
+  
+        // Navigate to ProfileView screen and pass profileData as a parameter
+        navigation.navigate("ProfileView", { profileData });
       }
     } catch (error) {
       console.log(error);

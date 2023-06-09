@@ -5,6 +5,7 @@ import Cocnecto from "./app/index";
 import JobDetails from "./app/jod-details/job";
 import LoginScreen from "./src/loginPage/login";
 import Profile from "./src/profile/profile";
+import ProfileView from './src/profile/ProfileView';
 
 import { initializeApp } from "firebase/app";
 import "firebase/firestore";
@@ -34,6 +35,7 @@ export default function App() {
           component={LoginScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen name="ProfileView" component={ProfileView } />
         <Stack.Screen name="Cocnecto" component={Cocnecto} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="JobDetails" component={JobDetails} />

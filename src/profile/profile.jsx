@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Text, Image, View, Button, TextInput, ScrollView } from "react-native";
 import { Calendar } from "react-native-calendars";
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import styles from "./profilestyles";
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 
-const Profile = ({ onFormSubmit }) => {
+const Profile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [specialty, setSpecialty] = useState("");
   const [availability, setAvailability] = useState({});
@@ -25,7 +27,8 @@ const Profile = ({ onFormSubmit }) => {
   const [isEditingContactInfo, setIsEditingContactInfo] = useState(false);
   const [gender, setGender] = useState("");
   const [showGenderOptions, setShowGenderOptions] = useState(false);
-
+  const navigation = useNavigation();
+  
   const firebaseConfig = {
     apiKey: "AIzaSyCXgeZFeZHqjocwoW42jksUIZFF6YGVVM0",
     authDomain: "cocnecto.firebaseapp.com",
@@ -57,8 +60,11 @@ const Profile = ({ onFormSubmit }) => {
             gender,
           };
 
+          await AsyncStorage.setItem("profileData", JSON.stringify(profileData));
+          console.log("Profile data saved successfully.");    
+
           const response = await axios.post(
-            
+            "",
             profileData,
             {
               headers: {
@@ -68,14 +74,19 @@ const Profile = ({ onFormSubmit }) => {
           );
           const userId = user.uid;
           const profileResponse = await axios.get(
-            
+            ``
           );
           const responseData = profileResponse.data;
           console.log("Profile info:", responseData);
-          // Handle the profile data in your frontend code
+          console.log("UserId:", userId );
+          
 
           const data = response.data;
           console.log(data);
+          
+
+          navigation.navigate('ProfileView', { profileData });
+          console.log("Navigated to ProfileView screen");
 
           const firestore = getFirestore(app);
           const profileRef = doc(firestore, "profiles", user.uid);
@@ -95,11 +106,14 @@ const Profile = ({ onFormSubmit }) => {
     }
   };
 
+
   function onFormSubmit(data) {
     console.log("Form submitted");
     console.log("Received data:", data);
   }
-
+  
+  
+  
   useEffect(() => {
     // Get the current date
     const today = new Date();
@@ -168,7 +182,7 @@ const Profile = ({ onFormSubmit }) => {
   };
 
   const renderExperienceEntries = () => {
-    return experienceEntries.map((entry) => (
+    return experienceEntries && experienceEntries.map((entry) => (
       <View key={entry.id} style={styles.entryContainer}>
         {editing ? (
           <>
@@ -315,7 +329,7 @@ const Profile = ({ onFormSubmit }) => {
               disabled={!isEditing && newSpecialty === ""}
             />
           </>
-        ) : specialty.length > 0 ? (
+        ) : specialty && specialty.length > 0 ? (
           <>
             <View style={styles.specialtyContainer}>
               <Text style={styles.specialtyText}>
@@ -329,7 +343,7 @@ const Profile = ({ onFormSubmit }) => {
         ) : (
           <Button title="Add Specialty" onPress={handleSpecialtyChange} />
         )}
-        {!isSpecialtyInputOpen && specialty.length > 0 && (
+        {!isSpecialtyInputOpen && specialty && specialty.length > 0 &&(
           <Button title="Edit" onPress={handleEditSpecialty} />
         )}
       </View>
@@ -443,7 +457,7 @@ const Profile = ({ onFormSubmit }) => {
         )}
       </View>
       <View>
-        <Button title="Submit" onPress={submitForm} style={styles.button} />
+        <Button title="Submit" onPress={() => submitForm(navigation)}style={styles.button} />
       </View>
     </View>
   );
