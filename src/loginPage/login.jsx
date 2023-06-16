@@ -48,7 +48,7 @@ const LoginScreen = () => {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("Login Successful");
       if (userType === "mixologist") {
-        navigation.navigate("Cocnecto");
+        navigation.navigate("Mixologies");
       } else {
         const profileDataString = await AsyncStorage.getItem("profileData");
         const profileData = JSON.parse(profileDataString);

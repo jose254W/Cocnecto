@@ -16,6 +16,7 @@ const Profile = () => {
   const [availability, setAvailability] = useState({});
   const [location, setLocation] = useState("");
   const [contactInfo, setContactInfo] = useState("");
+  const [fullName, setfullNameInfo] = useState("");
   const [experienceEntries, setExperienceEntries] = useState([]);
   const [editing, setEditing] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -25,6 +26,7 @@ const Profile = () => {
   const [isEditingLocation, setIsEditingLocation] = useState(false);
   const [isSpecialtyInputOpen, setIsSpecialtyInputOpen] = useState(false);
   const [isEditingContactInfo, setIsEditingContactInfo] = useState(false);
+  const [isEditingfullName, setIsEditingfullName] = useState(false);
   const [gender, setGender] = useState("");
   const [showGenderOptions, setShowGenderOptions] = useState(false);
   const navigation = useNavigation();
@@ -51,6 +53,7 @@ const Profile = () => {
           const profileData = {
             id: newId,
             userId: user.uid,
+            fullName,
             profileImage,
             specialty,
             availability,
@@ -64,7 +67,7 @@ const Profile = () => {
           console.log("Profile data saved successfully.");    
 
           const response = await axios.post(
-            "",
+            "http://192.168.100.43:3000/profile",
             profileData,
             {
               headers: {
@@ -74,7 +77,7 @@ const Profile = () => {
           );
           const userId = user.uid;
           const profileResponse = await axios.get(
-            ``
+            `http://192.168.100.43:3000/profile/${userId}`
           );
           const responseData = profileResponse.data;
           console.log("Profile info:", responseData);
@@ -261,6 +264,7 @@ const Profile = () => {
     setIsEditingLocation(false);
     setIsSpecialtyInputOpen(false);
     setIsEditingContactInfo(false);
+    setIsEditingfullName(false);
   };
 
   const handleAvailabilityChange = (date) => {
@@ -274,6 +278,10 @@ const Profile = () => {
     };
 
     setAvailability(updatedAvailability);
+  };
+
+  const handlefullNameInfoChange = (text) => {
+    setfullNameInfo(text);
   };
 
   const handleLocationChange = (text) => {
@@ -304,6 +312,23 @@ const Profile = () => {
         {profileImage && (
           <Button onPress={handleUploadDifferentImage} title="Change Profile" />
         )}
+      </View>
+      <View style={styles.container}>
+        {isEditingfullName ? (
+          <TextInput
+            style={styles.input}
+            placeholder="Full Name"
+            value={fullName}
+            onChangeText={handlefullNameInfoChange}
+          />
+        ) : (
+          <Text style={styles.ContactInfoText}>{fullName}</Text>
+        )}
+        <Button
+          title={isEditingfullName ? "Done" : "Edit Full Name"}
+          onPress={() => setIsEditingfullName(!isEditingfullName)}
+          style={styles.button}
+        />
       </View>
       <ScrollView style={styles.container}>
         {renderExperienceEntries()}
@@ -426,18 +451,18 @@ const Profile = () => {
           <View style={styles.genderOptions}>
             <Button
               title="Female"
-              onPress={() => handleGenderChange("female")}
+              onPress={() => handleGenderChange("Female")}
               style={[
                 styles.genderButton,
-                gender === "female" && styles.selectedGenderButton,
+                gender === "Female" && styles.selectedGenderButton,
               ]}
             />
             <Button
               title="Male"
-              onPress={() => handleGenderChange("male")}
+              onPress={() => handleGenderChange("Male")}
               style={[
                 styles.genderButton,
-                gender === "male" && styles.selectedGenderButton,
+                gender === "Male" && styles.selectedGenderButton,
               ]}
             />
             <Button

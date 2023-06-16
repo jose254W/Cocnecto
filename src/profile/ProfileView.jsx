@@ -21,8 +21,8 @@ const auth = getAuth(app);
 
 const ProfileView = () => {
   const route = useRoute();
-  const { profileData: initialProfileData } = route.params;
-  const [profileData, setProfileData] = useState(initialProfileData);
+  const { profileData: ProfileData } = route.params;
+  const [profileData, setProfileData] = useState(ProfileData);
   const navigation = useNavigation();
   const [setAvailabilityDates] = useState([]);
   const availabilityDates =
@@ -39,16 +39,15 @@ const ProfileView = () => {
           try {
             const userId = user.uid;
             const profileResponse = await axios.get(
-              ``
+              `http://192.168.100.43:3000/profile/${userId}`
             );
             const responseData = profileResponse.data;
             console.log("Success:", responseData);
-           
+            setProfileData(responseData);
             const dates = responseData.availability
               ? Object.values(responseData.availability).join(", ")
               : [];
             setAvailabilityDates(dates);
-            setProfileData(responseData);
           } catch (error) {
             console.error("Error fetching profile data:", error);
           }
@@ -71,6 +70,7 @@ const ProfileView = () => {
     await fetchProfileData(userId);
     navigation.navigate("Profile", { profileData, userId });
   };
+  console.log("Profile Data:", profileData);
 
   return (
     <ScrollView style={styles.container}>
@@ -84,6 +84,10 @@ const ProfileView = () => {
           ) : (
             <Text>No profile image available</Text>
           )}
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Full Name:</Text>
+          <Text>{profileData.fullName}</Text>
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Specialty:</Text>

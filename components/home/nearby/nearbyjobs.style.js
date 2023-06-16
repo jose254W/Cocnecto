@@ -4,29 +4,59 @@ import { COLORS, FONT, SIZES } from "../../../constants";
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: SIZES.xLarge,
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#E6F3FF",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: SIZES.small,
+    marginBottom: 20,
   },
   headerTitle: {
-    fontSize: SIZES.large,
-    fontFamily: FONT.medium,
-    color: COLORS.primary,
+    fontSize: 24,
+    fontWeight: "bold",
   },
   headerBtn: {
-    fontSize: SIZES.medium,
-    fontFamily: FONT.medium,
-    color: COLORS.gray,
+    fontSize: 18,
+    color: "#007AFF",
   },
   cardsContainer: {
-    marginTop: SIZES.medium,
-    gap: SIZES.small,
-    color: COLORS. tertiary,
+    flex: 1,
+  },
+  profileCard: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  profileImageWrapper: {
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  section: {
+    marginBottom: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  entryContainer: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
   },
 });
+
 
 export default styles;
