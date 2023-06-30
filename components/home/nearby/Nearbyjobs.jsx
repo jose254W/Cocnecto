@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Image,
+  Button,
 } from "react-native";
 import axios from "axios";
 import styles from "./nearbyjobs.style";
@@ -39,6 +40,10 @@ const Mixologies = () => {
   useEffect(() => {
     fetchProfileData();
   }, []);
+
+  const handleSendMessage = (name) => {
+    navigation.navigate("Message", { recipientName: name });
+  };
 
   return (
     <ScrollView>
@@ -130,6 +135,11 @@ const Mixologies = () => {
                   <Text style={styles.sectionTitle}>Gender:</Text>
                   <Text>{responseData.gender}</Text>
                 </View>
+
+                <Button
+                  title="Message"
+                  onPress={() => handleSendMessage(responseData.fullName)}
+                />
               </View>
             ))
           )}

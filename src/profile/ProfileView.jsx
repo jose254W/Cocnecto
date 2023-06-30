@@ -72,6 +72,13 @@ const ProfileView = () => {
   };
   console.log("Profile Data:", profileData);
 
+  const  handleNavigateToMessaging = () => {
+    navigation.navigate("Messaging", {
+      recipientId: userId,
+      recipientName: profileData.fullName,
+    });
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.container}>
@@ -134,6 +141,7 @@ const ProfileView = () => {
           <Text>{profileData.gender}</Text>
         </View>
         <Button title="Edit Profile" onPress={handleEditProfile} />
+        <Button title="Messages" onPress={handleNavigateToMessaging} />
       </View>
     </ScrollView>
   );

@@ -7,10 +7,13 @@ import LoginScreen from "./src/loginPage/login";
 import Profile from "./src/profile/profile";
 import ProfileView from './src/profile/ProfileView';
 import Mixologies from './components/home/nearby/NearbyJobsScreen';
+import Message from "./components/Messaging/message";
+import Messaging from "./src/mixologyMessages/messaging";
 
 import { initializeApp } from "firebase/app";
 import "firebase/firestore";
 import { getAuth } from "firebase/auth";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCXgeZFeZHqjocwoW42jksUIZFF6YGVVM0",
@@ -37,7 +40,9 @@ export default function App() {
           options={{ headerShown: false }}
         />
          <Stack.Screen name="Mixologies" component={Mixologies} />
+         <Stack.Screen name="Message" component={Message} />
         <Stack.Screen name="ProfileView" component={ProfileView } />
+        <Stack.Screen name="Messaging" component={Messaging} />
         <Stack.Screen name="Cocnecto" component={Cocnecto} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="JobDetails" component={JobDetails} />
