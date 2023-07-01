@@ -13,7 +13,7 @@ const serverURL = "http://192.168.100.43:3000";
 const socket = io(serverURL);
 
 const Message = ({ route }) => {
-  const { recipientId, recipientName } = route.params;
+  const { userId, recipientName, loggedInUserId } = route.params;
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
 
@@ -26,21 +26,61 @@ const Message = ({ route }) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
+    // Fetch messages from the backend
+    fetchMessages();
+
     return () => {
       socket.off("connect");
       socket.off("message");
     };
   }, []);
 
+  const fetchMessages = () => {
+    fetch(`${serverURL}/messaging/receive`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Received messages:", data);
+        setMessages(data);
+      })
+      .catch((error) => {
+        console.log("Error retrieving messages:", error);
+      });
+  };
+
   const handleSendMessage = () => {
     if (inputText.trim() !== "") {
       const newMessage = {
-        senderId: "clientId",
-        recipientId,
+        sender: loggedInUserId,
         content: inputText,
+        userId: userId,
+      };
+
+      // Send message to the backend
+      fetch(`${serverURL}/messaging/send`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newMessage),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Message sent successfully");
+          } else {
+            console.log("Failed to send message");
+          }
+        })
+        .catch((error) => {
+          console.log("Error sending message:", error);
+        });
+
+      // Display sent message immediately on UI
+      const sentMessage = {
+        ...newMessage,
         timestamp: new Date().toLocaleString(),
       };
-      socket.emit("send", newMessage);
+      setMessages((prevMessages) => [...prevMessages, sentMessage]);
+
       setInputText("");
     }
   };
@@ -54,9 +94,12 @@ const Message = ({ route }) => {
           <View
             style={[
               styles.messageBubble,
-              item.senderId === "clientId"
+              item.sender === userId
                 ? styles.clientMessage
                 : styles.userMessage,
+              item.sender === loggedInUserId
+                ? styles.sentMessage
+                : styles.receivedMessage,
             ]}
           >
             <Text style={styles.messageContent}>{item.content}</Text>
@@ -65,6 +108,7 @@ const Message = ({ route }) => {
         )}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.messageListContainer}
+        inverted
       />
       <View style={styles.inputContainer}>
         <TextInput

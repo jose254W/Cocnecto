@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -15,6 +15,8 @@ import { COLORS } from "../../../constants";
 import NearbyJobCard from "../../common/cards/nearby/NearbyJobCard";
 
 const Mixologies = () => {
+  const route = useRoute();
+  const loggedInUserId = route.params.loggedInUserId;
   const navigation = useNavigation();
   const [profileData, setProfileData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,8 +43,12 @@ const Mixologies = () => {
     fetchProfileData();
   }, []);
 
-  const handleSendMessage = (name) => {
-    navigation.navigate("Message", { recipientName: name });
+  const handleSendMessage = (name, userId) => {
+    navigation.navigate("Message", {
+      recipientName: name,
+      loggedInUserId,
+      userId,
+    });
   };
 
   return (
@@ -138,7 +144,12 @@ const Mixologies = () => {
 
                 <Button
                   title="Message"
-                  onPress={() => handleSendMessage(responseData.fullName)}
+                  onPress={() =>
+                    handleSendMessage(
+                      responseData.fullName,
+                      responseData.userId
+                    )
+                  }
                 />
               </View>
             ))

@@ -21,7 +21,7 @@ const auth = getAuth(app);
 
 const ProfileView = () => {
   const route = useRoute();
-  const { profileData: ProfileData } = route.params;
+  const { profileData: ProfileData, loggedInUserId } = route.params;
   const [profileData, setProfileData] = useState(ProfileData);
   const navigation = useNavigation();
   const [setAvailabilityDates] = useState([]);
@@ -72,9 +72,10 @@ const ProfileView = () => {
   };
   console.log("Profile Data:", profileData);
 
-  const  handleNavigateToMessaging = () => {
-    navigation.navigate("Messaging", {
-      recipientId: userId,
+  const handleNavigateToMessaging = () => {
+    navigation.navigate("Message", {
+      loggedInUserId,
+      userId: profileData.userId,
       recipientName: profileData.fullName,
     });
   };

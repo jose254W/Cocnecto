@@ -64,6 +64,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  sentMessage: {
+    backgroundColor: "#E8F0FF",
+    alignSelf: "flex-start",
+  },
+  receivedMessage: {
+    backgroundColor: "#F4F4F4",
+    alignSelf: "flex-end",
+  },
+  
 });
 
 export default styles;

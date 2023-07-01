@@ -9,7 +9,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { initializeApp } from "firebase/app";
 import "firebase/auth";
 import {
@@ -45,16 +45,23 @@ const LoginScreen = () => {
 
   const handleEmailLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      const userId = user.uid;
       console.log("Login Successful");
+
       if (userType === "mixologist") {
-        navigation.navigate("Mixologies");
+        navigation.navigate("Mixologies", { loggedInUserId: userId });
       } else {
         const profileDataString = await AsyncStorage.getItem("profileData");
         const profileData = JSON.parse(profileDataString);
-  
-        // Navigate to ProfileView screen and pass profileData as a parameter
-        navigation.navigate("ProfileView", { profileData });
+        navigation.navigate("ProfileView", {
+          profileData: { ...profileData, loggedInUserId: userId },
+        });
       }
     } catch (error) {
       console.log(error);
