@@ -66,11 +66,11 @@ const styles = StyleSheet.create({
   },
   sentMessage: {
     backgroundColor: "#E8F0FF",
-    alignSelf: "flex-start",
+    alignSelf: "flex-end",
   },
   receivedMessage: {
     backgroundColor: "#F4F4F4",
-    alignSelf: "flex-end",
+    alignSelf: "flex-start",
   },
   
 });

@@ -108,7 +108,6 @@ const Message = ({ route }) => {
         )}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.messageListContainer}
-        inverted
       />
       <View style={styles.inputContainer}>
         <TextInput

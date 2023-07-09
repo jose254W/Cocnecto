@@ -60,7 +60,8 @@ const LoginScreen = () => {
         const profileDataString = await AsyncStorage.getItem("profileData");
         const profileData = JSON.parse(profileDataString);
         navigation.navigate("ProfileView", {
-          profileData: { ...profileData, loggedInUserId: userId },
+          loggedInUserId: userId,
+          profileData: { ...profileData },
         });
       }
     } catch (error) {

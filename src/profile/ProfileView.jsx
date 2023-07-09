@@ -21,7 +21,8 @@ const auth = getAuth(app);
 
 const ProfileView = () => {
   const route = useRoute();
-  const { profileData: ProfileData, loggedInUserId } = route.params;
+  const { profileData: ProfileData } = route.params;
+  const { loggedInUserId } = route.params;
   const [profileData, setProfileData] = useState(ProfileData);
   const navigation = useNavigation();
   const [setAvailabilityDates] = useState([]);
@@ -30,41 +31,67 @@ const ProfileView = () => {
       ? Object.keys(profileData.availability)
       : [];
 
-  const userId = route.params?.userId;
-
   const fetchProfileData = async () => {
     try {
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          try {
-            const userId = user.uid;
-            const profileResponse = await axios.get(
-              `http://192.168.100.43:3000/profile/${userId}`
-            );
-            const responseData = profileResponse.data;
-            console.log("Success:", responseData);
-            setProfileData(responseData);
-            const dates = responseData.availability
-              ? Object.values(responseData.availability).join(", ")
-              : [];
-            setAvailabilityDates(dates);
-          } catch (error) {
-            console.error("Error fetching profile data:", error);
-          }
-        } else {
-          console.log("User is not signed in");
-        }
-      });
+      const profileResponse = await axios.get(
+        `http://192.168.100.43:3000/profile`
+      );
+      const responseData = profileResponse.data;
+      console.log("Success:", responseData);
+      setProfileData(responseData);
+
+      const userId = responseData.userId;
+
+      if (userId) {
+        const dates = responseData.availability
+          ? Object.values(responseData.availability).join(", ")
+          : [];
+        setAvailabilityDates(dates);
+      } else {
+        console.log("No profile found. Please create one.");
+        setProfileData(null);
+      }
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
   };
 
+  const getUserIdFromAuth = () => {
+    return new Promise((resolve, reject) => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          resolve(user.uid);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  };
+
   useEffect(() => {
-    if (userId) {
-      fetchProfileData(userId);
-    }
-  }, [userId]);
+    const fetchData = async () => {
+      try {
+        const loggedInUserId = await getUserIdFromAuth();
+        await fetchProfileData();
+        if (
+          loggedInUserId &&
+          profileData &&
+          loggedInUserId === profileData.userId
+        ) {
+          // Proceed with further processing since user IDs match
+        } else {
+          console.log("No profile found. Please create one.");
+          setProfileData(null); // Set profile data to null if the user IDs don't match
+        }
+      } catch (error) {
+       
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(loggedInUserId);
 
   const handleEditProfile = async () => {
     await fetchProfileData(userId);
@@ -78,29 +105,36 @@ const ProfileView = () => {
       userId: profileData.userId,
       recipientName: profileData.fullName,
     });
+    console.log("user:", loggedInUserId);
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView>
       <View style={styles.container}>
         <View style={styles.imageWrapper}>
-          {profileData.profileImage ? (
-            <Image
-              style={styles.profileImage}
-              source={{ uri: profileData.profileImage }}
-            />
+          {profileData ? (
+            profileData.profileImage ? (
+              <Image
+                style={styles.profileImage}
+                source={{ uri: profileData.profileImage }}
+              />
+            ) : (
+              <Text>No profile image available</Text>
+            )
           ) : (
-            <Text>No profile image available</Text>
+            <Text>Loading profile data...</Text>
           )}
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Full Name:</Text>
-          <Text>{profileData.fullName}</Text>
+          <Text>{profileData ? profileData.fullName : "No profile data"}</Text>
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Specialty:</Text>
           <Text>
-            {profileData.specialty && profileData.specialty.length > 0
+            {profileData &&
+            profileData.specialty &&
+            profileData.specialty.length > 0
               ? profileData.specialty.join(", ")
               : "No specialty information"}
           </Text>
@@ -115,15 +149,18 @@ const ProfileView = () => {
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Location:</Text>
-          <Text>{profileData.location}</Text>
+          <Text>{profileData ? profileData.location : "No profile data"}</Text>
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Contact Info:</Text>
-          <Text>{profileData.contactInfo}</Text>
+          <Text>
+            {profileData ? profileData.contactInfo : "No profile data"}
+          </Text>
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Experience Entries:</Text>
-          {profileData.experienceEntries &&
+          {profileData &&
+          profileData.experienceEntries &&
           profileData.experienceEntries.length > 0 ? (
             profileData.experienceEntries.map((entry) => (
               <View key={entry.id} style={styles.entryContainer}>
@@ -139,7 +176,7 @@ const ProfileView = () => {
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Gender:</Text>
-          <Text>{profileData.gender}</Text>
+          <Text>{profileData ? profileData.gender : "No profile data"}</Text>
         </View>
         <Button title="Edit Profile" onPress={handleEditProfile} />
         <Button title="Messages" onPress={handleNavigateToMessaging} />

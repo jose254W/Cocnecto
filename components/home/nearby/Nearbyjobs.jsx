@@ -65,7 +65,7 @@ const Mixologies = () => {
           {isLoading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />
           ) : error ? (
-            <Text>Error fetching profile data</Text>
+            <Text>Error Occured kindly Refresh </Text>
           ) : (
             profileData.map((responseData) => (
               <View
