@@ -13,6 +13,7 @@ import axios from "axios";
 import styles from "./nearbyjobs.style";
 import { COLORS } from "../../../constants";
 import NearbyJobCard from "../../common/cards/nearby/NearbyJobCard";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Mixologies = () => {
   const route = useRoute();
@@ -21,6 +22,7 @@ const Mixologies = () => {
   const [profileData, setProfileData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [loggedInUserName, setLoggedInUserName] = useState("");
 
   const fetchProfileData = async () => {
     setIsLoading(true);
@@ -43,6 +45,17 @@ const Mixologies = () => {
     fetchProfileData();
   }, []);
 
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoggedInUserName(user.displayName);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const handleSendMessage = (name, userId) => {
     navigation.navigate("Message", {
       recipientName: name,
@@ -54,6 +67,9 @@ const Mixologies = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
+        <View style={styles.userSection}>
+          <Text style={styles.userTitle}>{loggedInUserName}</Text>
+        </View>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Mixologies</Text>
           <TouchableOpacity onPress={fetchProfileData}>
@@ -65,7 +81,7 @@ const Mixologies = () => {
           {isLoading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />
           ) : error ? (
-            <Text>Error Occured kindly Refresh </Text>
+            <Text>Error Occurred, kindly Refresh</Text>
           ) : (
             profileData.map((responseData) => (
               <View

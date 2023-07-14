@@ -54,6 +54,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
     zIndex: -1,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 20,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#FF0000",
+  },
+  modalButton: {
+    marginVertical: 5,
+  },
 });
 
 export default styles;

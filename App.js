@@ -12,6 +12,7 @@ import Message from "./components/Messaging/message";
 import { initializeApp } from "firebase/app";
 import "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import RegisterScreen from "./src/registrationPage/RegisterScreen";
 
 
 const firebaseConfig = {
@@ -38,6 +39,7 @@ export default function App() {
           component={LoginScreen}
           options={{ headerShown: false }}
         />
+         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
          <Stack.Screen name="Mixologies" component={Mixologies} />
          <Stack.Screen name="Message" component={Message} />
         <Stack.Screen name="ProfileView" component={ProfileView } />

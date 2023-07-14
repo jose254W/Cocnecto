@@ -12,7 +12,7 @@ import styles from "./MessagingPage.style";
 const serverURL = "http://192.168.100.43:3000";
 const socket = io(serverURL);
 
-const Message = ({ route }) => {
+  const Message = ({ route }) => {
   const { userId, recipientName, loggedInUserId } = route.params;
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");

@@ -56,6 +56,20 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
+  userSection: {
+    alignItems: "center",
+    paddingVertical: 16,
+    backgroundColor: COLORS.lightGray,
+  },
+  userTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  userName: {
+    fontSize: 18,
+    color: COLORS.primary,
+  },
 });
 
 

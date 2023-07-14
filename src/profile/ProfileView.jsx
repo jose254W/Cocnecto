@@ -83,9 +83,7 @@ const ProfileView = () => {
           console.log("No profile found. Please create one.");
           setProfileData(null); // Set profile data to null if the user IDs don't match
         }
-      } catch (error) {
-       
-      }
+      } catch (error) {}
     };
 
     fetchData();
