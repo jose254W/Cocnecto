@@ -6,13 +6,15 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
+import { useRoute } from "@react-navigation/native";
 import io from "socket.io-client";
 import styles from "./MessagingPage.style";
 
 const serverURL = "http://192.168.100.43:3000";
 const socket = io(serverURL);
 
-  const Message = ({ route }) => {
+  const Message = () => {
+  const route = useRoute();
   const { userId, recipientName, loggedInUserId } = route.params;
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -54,7 +56,7 @@ const socket = io(serverURL);
         content: inputText,
         userId: userId,
       };
-
+      console.log(loggedInUserId)
       // Send message to the backend
       fetch(`${serverURL}/messaging/send`, {
         method: "POST",

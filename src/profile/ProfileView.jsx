@@ -98,12 +98,11 @@ const ProfileView = () => {
   console.log("Profile Data:", profileData);
 
   const handleNavigateToMessaging = () => {
-    navigation.navigate("Message", {
+    navigation.navigate("ChatList", {
       loggedInUserId,
       userId: profileData.userId,
       recipientName: profileData.fullName,
     });
-    console.log("user:", loggedInUserId);
   };
 
   return (
@@ -177,7 +176,7 @@ const ProfileView = () => {
           <Text>{profileData ? profileData.gender : "No profile data"}</Text>
         </View>
         <Button title="Edit Profile" onPress={handleEditProfile} />
-        <Button title="Messages" onPress={handleNavigateToMessaging} />
+        <Button title="Chats" onPress={handleNavigateToMessaging} />
       </View>
     </ScrollView>
   );

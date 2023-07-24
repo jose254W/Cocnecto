@@ -13,6 +13,7 @@ import { initializeApp } from "firebase/app";
 import "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import RegisterScreen from "./src/registrationPage/RegisterScreen";
+import ChatList from "./components/Messaging/ChatList";
 
 
 const firebaseConfig = {
@@ -41,6 +42,7 @@ export default function App() {
         />
          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
          <Stack.Screen name="Mixologies" component={Mixologies} />
+         <Stack.Screen name="ChatList" component={ChatList} />
          <Stack.Screen name="Message" component={Message} />
         <Stack.Screen name="ProfileView" component={ProfileView } />
         <Stack.Screen name="Cocnecto" component={Cocnecto} />
