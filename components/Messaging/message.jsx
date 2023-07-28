@@ -13,7 +13,7 @@ import styles from "./MessagingPage.style";
 const serverURL = "http://192.168.100.43:3000";
 const socket = io(serverURL);
 
-  const Message = () => {
+const Message = () => {
   const route = useRoute();
   const { userId, recipientName, loggedInUserId } = route.params;
   const [messages, setMessages] = useState([]);
@@ -56,7 +56,7 @@ const socket = io(serverURL);
         content: inputText,
         userId: userId,
       };
-      console.log(loggedInUserId)
+      console.log(loggedInUserId);
       // Send message to the backend
       fetch(`${serverURL}/messaging/send`, {
         method: "POST",
