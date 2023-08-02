@@ -8,8 +8,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     backgroundColor: "#f5f5f5",
-    fontSize: SIZES.medium,
-    fontFamily: FONT.medium,
     color: COLORS.primary,
     marginBottom: 20,
     marginTop: 20,

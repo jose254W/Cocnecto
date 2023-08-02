@@ -52,7 +52,6 @@ const ProfileView = () => {
         setProfileData(null);
       }
     } catch (error) {
-      console.error("Error fetching profile data:", error);
     }
   };
 
@@ -92,8 +91,8 @@ const ProfileView = () => {
   console.log(loggedInUserId);
 
   const handleEditProfile = async () => {
-    await fetchProfileData(userId);
-    navigation.navigate("Profile", { profileData, userId });
+    await fetchProfileData(loggedInUserId);
+    navigation.navigate("Profile", { profileData, loggedInUserId });
   };
   console.log("Profile Data:", profileData);
 
