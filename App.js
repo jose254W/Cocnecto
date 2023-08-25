@@ -14,6 +14,7 @@ import "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import RegisterScreen from "./src/registrationPage/RegisterScreen";
 import ChatList from "./components/Messaging/ChatList";
+import { NearbyJobCard } from "./components";
 
 
 const firebaseConfig = {
@@ -43,6 +44,7 @@ export default function App() {
          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
          <Stack.Screen name="Mixologies" component={Mixologies} />
          <Stack.Screen name="ChatList" component={ChatList} />
+         <Stack.Screen name="NearbyJobCard" component={NearbyJobCard} />
          <Stack.Screen name="Message" component={Message} />
         <Stack.Screen name="ProfileView" component={ProfileView } />
         <Stack.Screen name="Cocnecto" component={Cocnecto} />
@@ -53,16 +55,3 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000000",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  red: {
-    color: "red",
-    fontWeight: "bold",
-    fontSize: 60,
-  },
-});

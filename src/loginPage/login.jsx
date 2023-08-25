@@ -96,9 +96,9 @@ const LoginScreen = () => {
     const user = userCredential.user;
     const userId = user.uid;
 
-    if (selectedUserType === "mixologist") {
-      navigation.navigate("Mixologies", { loggedInUserId: userId });
-    } else if (selectedUserType === "client") {
+    if (selectedUserType === "client") {
+      navigation.navigate("NearbyJobCard");
+    } else if (selectedUserType === "mixologist") {
       const profileDataString = await AsyncStorage.getItem("profileData");
       const profileData = JSON.parse(profileDataString);
       navigation.navigate("ProfileView", {
@@ -154,14 +154,14 @@ const LoginScreen = () => {
               <Text style={styles.modalTitle}>Select User Type</Text>
               <View style={styles.modalButton}>
                 <Button
-                  title="Mixologist"
-                  onPress={() => handleUserTypeSelection("mixologist")}
+                  title="Client"
+                  onPress={() => handleUserTypeSelection("client")}
                 />
               </View>
               <View style={styles.modalButton}>
                 <Button
-                  title="Client"
-                  onPress={() => handleUserTypeSelection("client")}
+                  title="Mixologist"
+                  onPress={() => handleUserTypeSelection("mixologist")}
                 />
               </View>
             </View>
