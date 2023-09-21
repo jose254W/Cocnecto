@@ -17,7 +17,6 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Mixologies = () => {
   const route = useRoute();
-  const loggedInUserId = route.params.loggedInUserId;
   const navigation = useNavigation();
   const [profileData, setProfileData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,6 +32,7 @@ const Mixologies = () => {
       const responseData = response.data.profiles;
       console.log("Success:", responseData);
       setProfileData(responseData);
+      profile={responseData}
     } catch (error) {
       console.error("Error fetching profile data:", error);
       setError(true);
@@ -84,19 +84,17 @@ const Mixologies = () => {
             <Text>Error Occurred, kindly Refresh</Text>
           ) : (
             profileData.map((responseData) => (
-              <><NearbyJobCard
-                key={`nearby-profile-${responseData.id}`}
-                profile={responseData} // Pass the profile data as a prop
-                handleNavigate={() => handleSendMessage(responseData.fullName, responseData.userId)} />
-                <View
+              <>
+                <NearbyJobCard
                   key={`nearby-profile-${responseData.id}`}
-                  style={styles.profileCard}
-                >
+                  profile={responseData}
+                />
                   <View style={styles.profileImageWrapper}>
                     {responseData.profileImage ? (
                       <Image
                         style={styles.profileImage}
-                        source={{ uri: responseData.profileImage }} />
+                        source={{ uri: responseData.profileImage }}
+                      />
                     ) : (
                       <Text>No profile image available</Text>
                     )}
@@ -108,13 +106,14 @@ const Mixologies = () => {
                   <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Specialty:</Text>
                     <Text>
-                      {responseData.specialty && responseData.specialty.length > 0
+                      {responseData.specialty &&
+                      responseData.specialty.length > 0
                         ? responseData.specialty
-                          .replace(/[{}]/g, "")
-                          .replace(/"/g, "")
-                          .split(",")
-                          .map((item) => item.trim())
-                          .join(", ")
+                            .replace(/[{}]/g, "")
+                            .replace(/"/g, "")
+                            .split(",")
+                            .map((item) => item.trim())
+                            .join(", ")
                         : "No specialty information"}
                     </Text>
                   </View>
@@ -128,8 +127,8 @@ const Mixologies = () => {
                     {(!responseData.availability ||
                       Object.keys(JSON.parse(responseData.availability))
                         .length === 0) && (
-                        <Text>No availability information</Text>
-                      )}
+                      <Text>No availability information</Text>
+                    )}
                   </View>
 
                   <View style={styles.section}>
@@ -143,7 +142,7 @@ const Mixologies = () => {
                   <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Experience Entries:</Text>
                     {responseData.experienceEntries &&
-                      responseData.experienceEntries.length > 0 ? (
+                    responseData.experienceEntries.length > 0 ? (
                       responseData.experienceEntries.map((entry) => (
                         <View key={entry.id} style={styles.entryContainer}>
                           <Text>Title: {entry.title}</Text>
@@ -163,11 +162,14 @@ const Mixologies = () => {
 
                   <Button
                     title="Message"
-                    onPress={() => handleSendMessage(
-                      responseData.fullName,
-                      responseData.userId
-                    )} />
-                </View></>
+                    onPress={() =>
+                      handleSendMessage(
+                        responseData.fullName,
+                        responseData.userId
+                      )
+                    }
+                  />
+              </>
             ))
           )}
         </View>
