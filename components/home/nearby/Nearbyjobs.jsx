@@ -17,6 +17,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Mixologies = () => {
   const route = useRoute();
+  const { loggedInUserId } = route.params;
   const navigation = useNavigation();
   const [profileData, setProfileData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);

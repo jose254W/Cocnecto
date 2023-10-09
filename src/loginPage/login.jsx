@@ -97,7 +97,9 @@ const LoginScreen = () => {
     const userId = user.uid;
 
     if (selectedUserType === "client") {
-      navigation.navigate("Mixologies");
+      navigation.navigate("Mixologies", {
+        loggedInUserId: userId,
+      });
     } else if (selectedUserType === "mixologist") {
       const profileDataString = await AsyncStorage.getItem("profileData");
       const profileData = JSON.parse(profileDataString);
